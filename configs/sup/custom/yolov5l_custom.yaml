@@ -1,0 +1,51 @@
+# EfficientTeacher by Alibaba Cloud 
+
+# Parameters
+project: '/runs_yolov5'
+adam: False
+epochs: 300
+weights: ''
+prune_finetune: False
+linear_lr: True
+hyp:
+  lr0: 0.01
+  hsv_h: 0.015
+  hsv_s: 0.7
+  hsv_v: 0.4
+  lrf: 0.1
+  scale: 0.9
+  no_aug_epochs: 0
+  mixup: 0.1
+  warmup_epochs: 3
+
+Model:
+  depth_multiple: 1.00  # model depth multiple
+  width_multiple: 1.00  # layer channel multiple
+  Backbone: 
+    name: 'YoloV5'
+    activation: 'SiLU'
+  Neck: 
+    name: 'YoloV5' 
+    in_channels: [256, 512, 1024]
+    out_channels: [256, 512, 1024]
+    activation: 'SiLU'
+  Head: 
+    name: 'YoloV5'
+    activation: 'SiLU'
+  anchors: [[10,13, 16,30, 33,23],[30,61, 62,45, 59,119],[116,90, 156,198, 373,326]]  # P5/32]
+Loss:
+  type: 'ComputeLoss'
+  cls: 0.3
+  obj: 0.7
+  anchor_t: 4.0
+
+Dataset:
+  data_name: 'coco'
+  train: data/custom_train.txt  # 118287 images
+  val: data/custom_val.txt  # 5000 images
+  test: data/custom_val.txt # 20288 of 40670 images, submit to https://competitions.codalab.org/competitions/20794^
+  nc: 2  # number of classes
+  np: 0 #number of keypoints
+  names: [ 'rick', 'morty']
+  img_size: 640
+  batch_size: 128

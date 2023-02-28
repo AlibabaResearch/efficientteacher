@@ -1,0 +1,84 @@
+# EfficientTeacher by Alibaba Cloud 
+
+# Parameters
+project: 'exp_voc'
+epochs: 300
+# weights: '/mnt/bowen/runs_keypoints/exp565/weights/last.pt'
+weights: 'eff-yolov5l.pt'
+prune_finetune: False
+linear_lr: True
+
+hyp:
+  lr0: 0.01
+#  hsv_h: 0.015
+#  hsv_s: 0.7
+#  hsv_v: 0.4
+  lrf: 1.0
+#  scale: 0.9
+#  burn_epochs: 20
+  burn_epochs: 0
+  no_aug_epochs: 0
+  warmup_epochs: 3
+#  mixup: 0.1
+Model:
+  depth_multiple: 1.00  # model depth multiple
+  width_multiple: 1.00  # layer channel multiple
+  # anchors: 1  # number of anchors
+  Backbone:
+    name: 'YoloV5'
+    activation: 'SiLU'
+  Neck:
+    name: 'YoloV5'
+    in_channels: [256, 512, 1024]
+    out_channels: [256, 512, 1024]
+    activation: 'SiLU'
+  Head:
+    name: 'YoloV5'
+
+Dataset:
+  data_name: 'VOC'
+  train: data/voc/trainval2007.txt
+  val: data/voc/test2007.txt
+  test: data/voc/test2007.txt
+  target: data/voc/trainval2012.txt
+  nc: 20  # number of classes
+  np: 0 #number of keypoints
+  names: ['aeroplane', 'bicycle', 'bird', 'boat', 'bottle', 'bus', 'car', 'cat', 'chair', 'cow', 'diningtable', 'dog',
+          'horse', 'motorbike', 'person', 'pottedplant', 'sheep', 'sofa', 'train', 'tvmonitor']
+  #img_size: [704, 704]
+  img_size: 640
+  batch_size: 96
+  workers: 32
+
+Loss:
+  type: 'ComputeLoss'
+
+
+SSOD:
+  train_domain: True
+  nms_conf_thres: 0.1
+  nms_iou_thres: 0.65
+  teacher_loss_weight: 1.0
+  cls_loss_weight: 0.3
+  box_loss_weight: 0.05
+  obj_loss_weight: 0.7
+  loss_type: 'ComputeStudentMatchLoss'
+  ignore_thres_low: 0.1
+  ignore_thres_high: 0.6
+  uncertain_aug: True
+  use_ota: False
+  multi_label: False
+  with_da_loss: False
+  debug: False
+  ignore_obj: False
+  ema_rate: 0.999
+  cosine_ema: True
+  ssod_hyp:
+    with_gt: False
+    scale: 0.8
+    flipud: 0.0  # image flip up-down (probability)
+    fliplr: 0.5  # image flip left-right (probability)
+    mosaic: 1.0
+    cutout: 0.5
+    autoaugment: 0.5
+  #second_teacher_weight: '/home/mingtao/materials/bowen_weights/exp23/xiaokong-yolov5l-23.pt'

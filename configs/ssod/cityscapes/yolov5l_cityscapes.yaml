@@ -1,0 +1,98 @@
+# EfficientTeacher by Alibaba Cloud 
+
+# Parameters
+project: '/mnt/bowen/runs_cityscape'
+adam: False
+epochs: 100
+weights: ''
+# weights: '/mnt/bowen/runs_cityscape/exp157/weights/best.pt'
+# weights: '/mnt/bowen/EfficientTeacher/assets/mula-yolov5l.pt' #use pretrained best.pt
+prune_finetune: False
+linear_lr: True
+check_datacache: True
+noautoanchor: False
+
+hyp:
+  lr0: 0.01
+  hsv_h: 0.015
+  hsv_s: 0.7
+  hsv_v: 0.4
+  lrf: 0.1
+  scale: 0.5
+  burn_epochs: 0
+  no_aug_epochs: 0
+  warmup_epochs: 0
+  # cutout: 1.0
+  mosaic: 1.0
+
+Model:
+  depth_multiple: 1.00  # model depth multiple
+  width_multiple: 1.00  # layer channel multiple
+  # anchors: 1  # number of anchors
+  Backbone: 
+    name: 'YoloV5'
+    activation: 'SiLU'
+  Neck: 
+    name: 'YoloV5' 
+    in_channels: [256, 512, 1024]
+    out_channels: [256, 512, 1024]
+    activation: 'SiLU'
+  Head: 
+    name: 'YoloV5'
+  anchors: [[10,13, 16,30, 33,23],[30,61, 62,45, 59,119],[116,90, 156,198, 373,326]]  # P5/32]
+Loss:
+  type: 'ComputeLoss'
+  cls: 0.3
+  obj: 0.7
+  anchor_t: 5.0
+
+Dataset:
+  data_name: 'cityscapes'
+  train: /home/bowen/cityscapes/yolo_train_new.txt  # 118287 images
+  target: /home/bowen/cityscapes/yolo_foggytrain.txt  #unlabeled images for da training
+  val: /home/bowen/cityscapes/yolo_foggyval.txt
+  test: /home/bowen/cityscapes/yolo_foggytest.txt # 20288 of 40670 images
+
+  nc: 8  # number of classes
+  np: 0 #number of keypoints
+  names: ['car', 'bicycle', 'person', 'motorcycle', 'rider', 'truck', 'bus', 'train']
+
+  img_size: 960
+  batch_size: 16
+  sampler_type: 'normal'
+
+
+SSOD:
+  train_domain: True
+  nms_conf_thres: 0.1
+  nms_iou_thres: 0.65
+  teacher_loss_weight: 1.0
+  cls_loss_weight: 0.3
+  box_loss_weight: 0.05
+  obj_loss_weight: 0.7
+  # debug: True
+  # pseudo_label_type: 'LabelMatch'
+  # loss_type: 'ComputeStudentLoss'
+  loss_type: 'ComputeStudentMatchLoss'
+  ignore_thres_low: 0.1
+  ignore_thres_high: 0.6
+  # label_match_percent: 0.4
+  uncertain_aug: True
+  use_ota: False
+  multi_label: False
+  ignore_obj: False
+  pseudo_label_with_obj: True
+  pseudo_label_with_bbox: True
+  pseudo_label_with_cls: False
+  with_da_loss: True
+  da_loss_weights: 0.1
+  ema_rate: 0.999
+  ssod_hyp:
+    with_gt: True
+    mosaic: 1.0
+    cutout: 0.5
+    autoaugment: 0.5
+    scale: 0.5
+    degrees: 0.0
+    shear: 0.0
+  #second_teacher_weight: '/home/mingtao/materials/bowen_weights/exp23/xiaokong-yolov5l-23.pt'

@@ -1,0 +1,68 @@
+
+# Parameters
+project: 'runs/yolov6'
+adam: False
+epochs: 300
+# weights: '/mnt/bowen/runs_mula_debug/exp8/weights/best.pt'
+weights: ''
+prune_finetune: False
+save_period: 49
+find_unused_parameters: True
+
+hyp:
+  lr0: 0.01
+  hsv_h: 0.015
+  hsv_s: 0.7
+  hsv_v: 0.4
+  lrf: 0.2
+  warmup_epochs: 5
+  no_aug_epochs: 30
+
+Model:
+  depth_multiple: 0.33  # model depth multiple
+  width_multiple: 0.50  # layer channel multiple
+  # anchors: 1  # number of anchors
+  Backbone: 
+    name: 'YoloV6'
+    num_repeats: [1, 6, 12, 18, 6]
+    out_channels: [64, 128, 256, 512, 1024]
+  Neck: 
+    name: 'YoloV6' 
+    num_repeats: [12, 12, 12, 12]
+    out_channels: [256, 128, 128, 256, 256, 512]
+    num_outs: 3
+  Head: 
+    name: 'YoloV6'
+  anchors: [1]  # P5/32]
+  RealVGGModel: False
+  LinearAddModel: True
+Loss:
+  type: 'ComputeTalLoss'
+  use_dfl: True
+  reg_max: 16
+  qfl_loss_weight: 1.0
+  dfl_loss_weight: 0.5
+  box_loss_weight: 2.5
+
+
+Dataset:
+  data_name: 'coco'
+  # train: /mnt/annotations/aibox/aibox_train_2in1_keypoints_and_bbox_and_double_yellow_balance_improve.txt  # 118287 images
+  train: data/train2017.txt  # 118287 images
+  val: data/val2017.txt  # 5000 images
+  test: data/val2017.txt # 20288 of 40670 images, submit to https://competitions.codalab.org/competitions/20794^
+  # nc: 15  # number of classes
+  nc: 80  # number of classes
+  np: 0 #number of keypoints
+  names: [ 'person', 'bicycle', 'car', 'motorcycle', 'airplane', 'bus', 'train', 'truck', 'boat', 'traffic light',
+         'fire hydrant', 'stop sign', 'parking meter', 'bench', 'bird', 'cat', 'dog', 'horse', 'sheep', 'cow',
+         'elephant', 'bear', 'zebra', 'giraffe', 'backpack', 'umbrella', 'handbag', 'tie', 'suitcase', 'frisbee',
+         'skis', 'snowboard', 'sports ball', 'kite', 'baseball bat', 'baseball glove', 'skateboard', 'surfboard',
+         'tennis racket', 'bottle', 'wine glass', 'cup', 'fork', 'knife', 'spoon', 'bowl', 'banana', 'apple',
+         'sandwich', 'orange', 'broccoli', 'carrot', 'hot dog', 'pizza', 'donut', 'cake', 'chair', 'couch',
+         'potted plant', 'bed', 'dining table', 'toilet', 'tv', 'laptop', 'mouse', 'remote', 'keyboard', 'cell phone',
+         'microwave', 'oven', 'toaster', 'sink', 'refrigerator', 'book', 'clock', 'vase', 'scissors', 'teddy bear',
+         'hair drier', 'toothbrush' ]
+  #img_size: [704, 704]
+  img_size: 640
+  batch_size: 128
