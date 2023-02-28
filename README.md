@@ -50,7 +50,7 @@ Efficient Teacher's detection algorithms trained on various open source datasets
 
 ### MS-COCO SSOD
 |Model |Dataset|size<br><sup>(pixels)|mAP<sup>val<br>0.5:0.95 |Speed<br><sup>V100<br>Pytorch<br>b32<br>FP32<br>(ms)|params<br><sup>(M) |FLOPs<br><sup>@640 (G)
-|---  |---    |---                  |---  |---    |---    |---    |---    |---   
+|---  |---    |---                  |---  |---    |---    |---   
 |YOLOv5l<br>Supervised|1% labeled|640 | 9.91  |6.2    |46.56    |109.59
 |YOLOv5l<br>Efficient Teacher   |1% labeled|640 | **23.8**  |6.2    |46.56    |109.59
 |YOLOv5l<br>Supervised|2% labeled|640 | 14.01  |6.2    |46.56    |109.59
