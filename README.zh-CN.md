@@ -70,7 +70,16 @@ Efficient Teacher算法的使用场景
              └── images
              └── labels
   ```
-- 生成训练集和验证集的目录(这部分文件正在上传网盘，请稍等)
+- 下载训练集和验证集的图片列表：
+  ```
+  bash data/get_label.sh
+  ```
+- 将图片列表中的 "local_path" 修改成您自己的当前放置efficientteacher代码的folder.
+  ```
+  CUR_PATH=$(pwd)
+  sed -i "s#local_path#$CUR_PATH#" data/coco/train2017*.txt
+  sed -i "s#local_path#$CUR_PATH#" data/coco/val2017.txt
+  ```
 - 如果您的训练GPU没有驱动的特殊限制，我们推荐您直接使用达摩院提供的容器，这是我们训练和验证模型使用的默认容器，这样能规避大量的三方库版本冲突问题：
   ```
   docker run registry.cn-hangzhou.aliyuncs.com/modelscope-repo/modelscope:ubuntu20.04-cuda11.3.0-py37-torch1.11.0-tf1.15.5-1.3.0
@@ -153,8 +162,10 @@ find <unlabeld_data_path> -name "*.jpg" >> unlabel.txt
    export CUDA_VISIBLE_DEVICES="0,1,2,3,4,5,6,7"
    python -m torch.distributed.launch --nproc_per_node 8 --master_addr 127.0.0.2 --master_port 29502 train.py --cfg configs/sup/custom/yolov5l_custom.yaml 
    ```
-  <details>
-  <summary>直接进行半监督训练</summary>
+</details>
+
+<details>
+<summary>直接进行半监督训练</summary>
   如果您是一个YOLOv5的老玩家，项目经验非常丰富，我们推荐您直接开始进行半监督训练（因为调试过程中遇到的小问题估计也难不倒您）
   1.直接根据``` configs/custom/yolov5l_custom_ssod.yaml```开始修改配置，```train/val/test```都添好，然后生成一份无标签数据集的txt:```find img_dir -name "*.jpg" >> target_img.txt```, 将这个txt的地址填到```target```那里
   2.修改```nc```和```names```, 再配合您对这个检测任务的理解, 修改SSOD配置部分的```nms_iou_thres```以及```ignore_thres_high```
@@ -167,7 +178,7 @@ find <unlabeld_data_path> -name "*.jpg" >> unlabel.txt
   ```
   python val.py --cfg configs/ssod/custom/yolov5l_custom_ssod.yaml --weights ssod-yolov5l.pt  --val-ssod
   ```
-  </details>
+</details>
 
 
 ### 引用我们的论文

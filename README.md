@@ -75,6 +75,10 @@ Efficient Teacher's detection algorithms trained on various open source datasets
              └── images
              └── labels
   ```
+- download train/val dataset list:
+  ```
+  bash data/get_label.sh
+  ```
 - replace the "local_path" with your local path of the EfficientTeacher folder.
   ```
   CUR_PATH=$(pwd)
