@@ -1,4 +1,5 @@
 ### Efficient Teacher
+[English](README.md) | [简体中文](README.zh-CN.md)
 
 [![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/efficient-teacher-semi-supervised-object/semi-supervised-object-detection-on-coco-10)](https://paperswithcode.com/sota/semi-supervised-object-detection-on-coco-10?p=efficient-teacher-semi-supervised-object)
 [![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/efficient-teacher-semi-supervised-object/semi-supervised-object-detection-on-coco-2)](https://paperswithcode.com/sota/semi-supervised-object-detection-on-coco-2?p=efficient-teacher-semi-supervised-object)
@@ -67,7 +68,7 @@ Efficient Teacher's detection algorithms trained on various open source datasets
   ```
 - Organize downloaded pictures and annotation files in the following format.
   ```
-  EfficientTeacher
+  efficientteacher
     ├── data
     └── datasets
         └── coco  ← downloads here (20.1 GB)
@@ -109,7 +110,7 @@ Before we proceed with semi-supervised training, we need you to convert your own
 
 - modify the ```val: data/custom_val.txt``` in ```yolov5l_custom.yaml``` into your own validation set path, then run the following code: 
   ```
-  python val.py --cfg configs/custom/yolov5l_custom.yaml --weights efficient-yolov5l.pt 
+  python val.py --cfg configs/sup/custom/yolov5l_custom.yaml --weights efficient-yolov5l.pt 
   ```
 - if you modify the file read path, you will need to add the corresponding modifications in the utils/dataloader.py file, just like you did when you modified the code for YOLOv5.
 
@@ -204,7 +205,7 @@ We have verified the Efficient Teacher in many actual projects, so we do not rec
 ```
 
 ### Reference
- EfficientTeacher is developed by Alibaba and based on the yolov5 program.  Code is distributed under the GPL3.0.
+ efficientteacher is developed by Alibaba and based on the yolov5 program.  Code is distributed under the GPL3.0.
  This product contains various third-party components under other open source licenses. See the NOTICE file for more information.
 1. https://github.com/facebookresearch/detectron2
 2. https://github.com/Megvii-BaseDetection/YOLOX
