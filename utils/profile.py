@@ -270,7 +270,10 @@ def profile(model, inputs, custom_ops=None, verbose=False, clever=False):
         return total_ops, total_params
 
 
-from collections import Iterable
+try:
+    from collections.abc import Iterable
+except ImportError:
+    from collections import Iterable
 
 
 def clever_format(nums, format="%.2f"):
