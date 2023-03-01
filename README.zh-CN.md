@@ -163,22 +163,26 @@ Efficient Teacher算法的使用场景
    export CUDA_VISIBLE_DEVICES="0,1,2,3,4,5,6,7"
    python -m torch.distributed.launch --nproc_per_node 8 --master_addr 127.0.0.2 --master_port 29502 train.py --cfg configs/sup/custom/yolov5l_custom.yaml 
    ```
-</details>
+   </details>
 
 <details>
 <summary>直接进行半监督训练</summary>
-  如果您是一个YOLOv5的老玩家，项目经验非常丰富，我们推荐您直接开始进行半监督训练（因为调试过程中遇到的小问题估计也难不倒您）
-  1.直接根据``` configs/custom/yolov5l_custom_ssod.yaml```开始修改配置，```train/val/test```都添好，然后生成一份无标签数据集的txt:```find img_dir -name "*.jpg" >> target_img.txt```, 将这个txt的地址填到```target```那里
-  2.修改```nc```和```names```, 再配合您对这个检测任务的理解, 修改SSOD配置部分的```nms_iou_thres```以及```ignore_thres_high```
-  3.默认的半监督训练方案是先训220epoch的有监督，然后进入半监督：
-  ```
-   export CUDA_VISIBLE_DEVICES="0,1,2,3,4,5,6,7"
-   python -m torch.distributed.launch --nproc_per_node 8 --master_addr 127.0.0.2 --master_port 29502 train.py --cfg configs/ssod/custom/yolov5l_custom_ssod.yaml 
-  ```
-  4.验证SSOD模型
-  ```
-  python val.py --cfg configs/ssod/custom/yolov5l_custom_ssod.yaml --weights ssod-yolov5l.pt  --val-ssod
-  ```
+
+如果您是一个YOLOv5的老玩家，项目经验非常丰富，我们推荐您直接开始进行半监督训练（因为调试过程中遇到的小问题估计也难不倒您）
+
+1.   直接根据``` configs/custom/yolov5l_custom_ssod.yaml```开始修改配置，```train/val/test```都添好，然后生成一份无标签数据集的txt:```find img_dir -name "*.jpg" >> target_img.txt```, 将这个txt的地址填到```target```那里
+2.  修改```nc```和```names```, 再配合您对这个检测任务的理解, 修改SSOD配置部分的```nms_iou_thres```以及```ignore_thres_high```
+3.  默认的半监督训练方案是先训220epoch的有监督，然后进入半监督：
+
+    ```
+     export CUDA_VISIBLE_DEVICES="0,1,2,3,4,5,6,7"
+     python -m torch.distributed.launch --nproc_per_node 8 --master_addr 127.0.0.2 --master_port 29502 train.py --cfg configs/ssod/custom/yolov5l_custom_ssod.yaml 
+    ```
+4. 验证SSOD模型
+
+    ```
+    python val.py --cfg configs/ssod/custom/yolov5l_custom_ssod.yaml --weights ssod-yolov5l.pt  --val-ssod
+    ```
 </details>
 
 
