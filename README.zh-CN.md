@@ -119,7 +119,7 @@ Efficient Teacher算法的使用场景
 ```
 find <unlabeld_data_path> -name "*.jpg" >> unlabel.txt
 ```
-- 将上面生成的```unlabel.txt```的绝对路径用来替换```yolov5_custom.yaml```的```target: data_custom_target.txt```，然后粘贴一下部分配置文件到``` yolov5l_custom.yaml ```中:
+- 将上面生成的```unlabel.txt```的绝对路径用来替换```yolov5_custom.yaml```的```target: data_custom_target.txt```，然后粘贴以下部分配置文件到``` yolov5l_custom.yaml ```中:
 ```
   SSOD:
     train_domain: True
