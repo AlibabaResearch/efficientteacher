@@ -93,6 +93,7 @@ Efficient Teacher算法的使用场景
 ### 在实际项目中使用Efficient Teacher方案
 <details>
 <summary>从有监督过渡到半监督方案</summary>
+
 感谢您选择这种稳健的方案来验证半监督训练的效果，这个方案步骤稍微多一些，但是每一步都是有基准线的，请按照以下步骤开始您的旅程：
 1. 模型转换
 - 首先请您查看一下```configs/custom/yolov5_custom.yaml```这份文件，如果您的模型是YOLOv5l, 那么你只需要修改yaml文件中Dataset里的nc参数，再修改一些类别名。如果您的模型结构是n/m/s/x，那么您还需要针对性地修改depth_multiple和width_multiple这两个参数
@@ -106,58 +107,58 @@ Efficient Teacher算法的使用场景
   python val.py --cfg configs/sup/custom/yolov5l_custom.yaml --weights efficient-yolov5l.pt 
   ```
 
-3. 有监督训练(可选但建议也试试)
-将```configs/custom/yolov5_custom.yaml```中的```train: data/custom_train.txt```修改成您的地址, 然后输入以下指令：
-  ```
-  export CUDA_VISIBLE_DEVICES="0,1,2,3,4,5,6,7"
-  python -m torch.distributed.launch --nproc_per_node 8 --master_addr 127.0.0.2 --master_port 29502 train.py --cfg configs/sup/custom/yolov5l_custom.yaml 
-  ```
-应该就可以开始有监督训练了
+3. 有监督训练(可选但建议也试试)将```configs/custom/yolov5_custom.yaml```中的```train: data/custom_train.txt```修改成您的地址, 然后输入以下指令：
+    ```
+    export CUDA_VISIBLE_DEVICES="0,1,2,3,4,5,6,7"
+    python -m torch.distributed.launch --nproc_per_node 8 --master_addr 127.0.0.2 --master_port 29502 train.py --cfg configs/sup/custom/yolov5l_custom.yaml 
+    ```
+    应该就可以开始有监督训练了
+
 
 4. 开始半监督训练
 - 将``` yolov5l_custom.yaml```中的```train: data/custom_train.txt```修改成您的训练集地址, 然后利用以下命令去索引所有你想加入训练的无标签图片：
-```
-find <unlabeld_data_path> -name "*.jpg" >> unlabel.txt
-```
-- 将上面生成的```unlabel.txt```的绝对路径用来替换```yolov5_custom.yaml```的```target: data_custom_target.txt```，然后粘贴以下部分配置文件到``` yolov5l_custom.yaml ```中:
-```
-  SSOD:
-    train_domain: True
-    nms_conf_thres: 0.1
-    nms_iou_thres: 0.65
-    teacher_loss_weight: 3.0
-    cls_loss_weight: 0.3
-    box_loss_weight: 0.05
-    obj_loss_weight: 0.7
-    loss_type: 'ComputeStudentMatchLoss'
-    ignore_thres_low: 0.1
-    ignore_thres_high: 0.6
-    uncertain_aug: True
-    use_ota: False
-    multi_label: False
-    ignore_obj: False
-    pseudo_label_with_obj: True
-    pseudo_label_with_bbox: True
-    pseudo_label_with_cls: False
-    with_da_loss: False
-    da_loss_weights: 0.01
-    epoch_adaptor: True
-    resample_high_percent: 0.25
-    resample_low_percent: 0.99
-    ema_rate: 0.999
-    cosine_ema: True
-    imitate_teacher: False
-    ssod_hyp:
-      with_gt: False
-      mosaic: 1.0
-      cutout: 0.5
-      autoaugment: 0.5
-      scale: 0.8
-      degrees: 0.0
-      shear: 0.0
   ```
-  - 另外，如果您需要读取一开始生成出来的那份模型，请将它填在weights那一栏，如果您想先有监督训一会然后开始半监督，请在burn_in_epoch参数那一栏填上你希望首先进行有监督epoch数
-  - 恭喜您以及完全按照我们的教程写出一份能够进行半监督目标检测训练的配置文件了，有点冗长但其实并不复杂，下面就开始开始训练了：
+  find <unlabeld_data_path> -name "*.jpg" >> unlabel.txt
+  ```
+- 将上面生成的```unlabel.txt```的绝对路径用来替换```yolov5_custom.yaml```的```target: data_custom_target.txt```，然后粘贴以下部分配置文件到``` yolov5l_custom.yaml ```中:
+  ```
+    SSOD:
+      train_domain: True
+      nms_conf_thres: 0.1
+      nms_iou_thres: 0.65
+      teacher_loss_weight: 3.0
+      cls_loss_weight: 0.3
+      box_loss_weight: 0.05
+      obj_loss_weight: 0.7
+      loss_type: 'ComputeStudentMatchLoss'
+      ignore_thres_low: 0.1
+      ignore_thres_high: 0.6
+      uncertain_aug: True
+      use_ota: False
+      multi_label: False
+      ignore_obj: False
+      pseudo_label_with_obj: True
+      pseudo_label_with_bbox: True
+      pseudo_label_with_cls: False
+      with_da_loss: False
+      da_loss_weights: 0.01
+      epoch_adaptor: True
+      resample_high_percent: 0.25
+      resample_low_percent: 0.99
+      ema_rate: 0.999
+      cosine_ema: True
+      imitate_teacher: False
+      ssod_hyp:
+        with_gt: False
+        mosaic: 1.0
+        cutout: 0.5
+        autoaugment: 0.5
+        scale: 0.8
+        degrees: 0.0
+        shear: 0.0
+  ```
+- 另外，如果您需要读取一开始生成出来的那份模型，请将它填在weights那一栏，如果您想先有监督训一会然后开始半监督，请在burn_in_epoch参数那一栏填上你希望首先进行有监督epoch数
+- 恭喜您以及完全按照我们的教程写出一份能够进行半监督目标检测训练的配置文件了，有点冗长但其实并不复杂，下面就开始开始训练了：
    ```
    export CUDA_VISIBLE_DEVICES="0,1,2,3,4,5,6,7"
    python -m torch.distributed.launch --nproc_per_node 8 --master_addr 127.0.0.2 --master_port 29502 train.py --cfg configs/sup/custom/yolov5l_custom.yaml 
