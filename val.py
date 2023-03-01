@@ -17,7 +17,6 @@ Usage - formats:
                               yolov5s.tflite             # TensorFlow Lite
                               yolov5s_edgetpu.tflite     # TensorFlow Edge TPU
                               yolov5s_paddle_model       # PaddlePaddle
-                              yolov5s.magicmind          # Cambricon MLU(Magicmind)
 """
 
 import argparse
