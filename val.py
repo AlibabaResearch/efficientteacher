@@ -17,7 +17,6 @@ Usage - formats:
                               yolov5s.tflite             # TensorFlow Lite
                               yolov5s_edgetpu.tflite     # TensorFlow Edge TPU
                               yolov5s_paddle_model       # PaddlePaddle
-                              yolov5s.magicmind          # Cambricon MLU(Magicmind)
 """
 
 import argparse
@@ -174,7 +173,7 @@ def run(data,
         compute_loss=None,
         model_post=None,
         eval_num = -1,
-        config = None,
+        cfg = None,
         val_ssod = False,
         num_points = 0,
         val_kp = False,
@@ -215,17 +214,17 @@ def run(data,
         # Multi-GPU disabled, incompatible with .half() https://github.com/ultralytics/yolov5/issues/99
         # if device.type != 'cpu' and torch.cuda.device_count() > 1:
         #     model = nn.DataParallel(model)
-        if config != '':
-            cfg = get_cfg()
-            cfg.merge_from_file(config)
+        if cfg != '':
+            val_cfg = get_cfg()
+            val_cfg.merge_from_file(cfg)
             data = {}
-            data['val'] = cfg.Dataset.val
-            data['nc'] = cfg.Dataset.nc
-            data['names'] = cfg.Dataset.names
-            val_kp = cfg.Dataset.val_kp
+            data['val'] = val_cfg.Dataset.val
+            data['nc'] = val_cfg.Dataset.nc
+            data['names'] = val_cfg.Dataset.names
+            val_kp = val_cfg.Dataset.val_kp
         else:
             data = check_dataset(data)  # check
-            cfg = None
+            val_cfg = None
 
         # Data
         if val_ssod:
@@ -252,7 +251,7 @@ def run(data,
         model.warmup(imgsz=(1 if pt else batch_size, 3, imgsz, imgsz))  # warmup
         pad = 0.0 if task == 'speed' else 0.5
         task = task if task in ('train', 'val', 'test') else 'val'  # path to train/val/test images
-        dataloader = create_dataloader(data[task], imgsz, batch_size, gs, single_cls, pad=pad, rect=True, cfg=cfg,
+        dataloader = create_dataloader(data[task], imgsz, batch_size, gs, single_cls, pad=pad, rect=True, cfg=val_cfg,
                                        prefix=colorstr(f'{task}: '))[0]
 
     seen = 0
@@ -487,12 +486,12 @@ def parse_opt():
     parser.add_argument('--name', default='exp', help='save to project/name')
     parser.add_argument('--exist-ok', action='store_true', help='existing project/name ok, do not increment')
     parser.add_argument('--half', action='store_true', help='use FP16 half-precision inference')
-    parser.add_argument('--val-ssod',  action='store_true', help='trigger when val domain-adapation') 
+    parser.add_argument('--val-ssod',  action='store_true', help='trigger when val semi-supervised') 
     parser.add_argument('--num-points',  type=int, default=0, help='num of keypoints') 
-    parser.add_argument('--config', type=str, default='', help='num of keypoints') 
+    parser.add_argument('--cfg', type=str, default='', help='The config file used for validation') 
     parser.add_argument('--val-dp1000',  action='store_true', help='trigger when val dp1000 model') 
     opt = parser.parse_args()
-    if opt.config == '':
+    if opt.cfg == '':
         opt.data = check_yaml(opt.data)  # check YAML
         opt.save_json |= opt.data.endswith('coco.yaml')
     opt.save_txt |= opt.save_hybrid
