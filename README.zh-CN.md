@@ -55,7 +55,6 @@ Efficient Teacher算法的使用场景
 |YOLOv5l<br>Efficient Teacher|5% labeled|640 | **34.1**  |6.2    |46.56    |109.59
 |YOLOv5l<br>Supervised|10% labeled|640 | 28.45  |6.2    |46.56    |109.59
 |YOLOv5l<br>Efficient Teacher|10% labeled|640 | **37.9**  |6.2    |46.56    |109.59
-
 ### 复现我们的COCO半监督训练实验
 - 首先，请您下载YOLOv5提供的COCO数据集，他们已经帮您处理好标签格式，这会为您复现代码节约大量的时间
   ```
@@ -170,7 +169,7 @@ Efficient Teacher算法的使用场景
 
 如果您是一个YOLOv5的老玩家，项目经验非常丰富，我们推荐您直接开始进行半监督训练（因为调试过程中遇到的小问题估计也难不倒您）
 
-1.   直接根据``` configs/custom/yolov5l_custom_ssod.yaml```开始修改配置，```train/val/test```都添好，然后生成一份无标签数据集的txt:```find img_dir -name "*.jpg" >> target_img.txt```, 将这个txt的地址填到```target```那里
+1.   直接根据``` configs/ssod/custom/yolov5l_custom_ssod.yaml```开始修改配置，```train/val/test```都添好，然后生成一份无标签数据集的txt:```find img_dir -name "*.jpg" >> target_img.txt```, 将这个txt的地址填到```target```那里
 2.  修改```nc```和```names```, 再配合您对这个检测任务的理解, 修改SSOD配置部分的```nms_iou_thres```以及```ignore_thres_high```
 3.  默认的半监督训练方案是先训220epoch的有监督，然后进入半监督：
 
