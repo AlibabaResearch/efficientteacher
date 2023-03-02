@@ -104,7 +104,7 @@ Efficient Teacher's detection algorithms trained on various open source datasets
 Before we proceed with semi-supervised training, we need you to convert your own model trained with the YOLOv5 open source framework into a format that we can recognize. If you are using version 6.0 or later, the process is very fast and can be completed in five minutes: 
 
 1. Convert Model
-- First, you need to write a yaml file. You can directly modify the file ```configs/custom/yolov5l_custom.yaml```. If your model is yolov5l, then you only need to modify the nc in Dataset to the number of your detection classes and then modify the names. If your model is other depth and width configurations, then modify the depth_multiple and width_multiple to the corresponding configurations. 
+- First, you need to write a yaml file. You can directly modify the file ```configs/sup/custom/yolov5l_custom.yaml```. If your model is yolov5l, then you only need to modify the nc in Dataset to the number of your detection classes and then modify the names. If your model is other depth and width configurations, then modify the depth_multiple and width_multiple to the corresponding configurations. 
 - After having this yaml file, go to the scripts folder to modify the ```convert_pt_to_efficient.py```, fill in your business model pt, yaml, and the exported pt file.
 - OK, you have already converted your pt file into a version that our algorithm library can recognize. Don't worry, if you need to export the model to onnx or export it back to your own YOLOv5 algorithm library, we also provide corresponding scripts.
 
