@@ -37,16 +37,16 @@ Efficient Teacher's detection algorithms trained on various open source datasets
 |YOLOXn      |320  |24.2   |38.4   |55.7     |36.5   |0.5    |2.02    | 1.39
 |YOLOv6n RepOpt TAL     |640  |34.4   |49.3   |61.1     |45.8    |0.9   |4.34    |11.26
 |YOLOv5s ReLU|640  |36.0   |54.2   |66.4     |50.0    |1.6    |7.2    |16.5
-|YOLOv5s      |640  |37.4   |56.8   |68.1     |50.9    |1.6    |7.2    |16.5
+|[**YOLOv5s**](https://github.com/AlibabaResearch/efficientteacher/releases/download/1.0/efficient-yolov5s.pt)      |640  |37.4   |56.8   |68.1     |50.9    |1.6    |7.2    |16.5
 |YOLOXs      |640  |39.7   |59.6   |65.2     |56.0    |1.7    |8.04    |21.42
 |YOLOv6t RepOpt TAL     |640  |40.3   |56.5   |68.9     |50.5    |1.7    |9.72    |25.11
 |YOLOv6s RepOpt      |640  |41.7   |60.2   |66.9     |56.3    |1.9    |17.22    |44.25
 |YOLOv6s RepOpt TAL      |640  |42.1   |58.6   |69.1     |52.5    |1.9    |17.22    |44.25
 |YOLOv6s      |640  |42.2   |60.2   |67.9     |56.3    |1.9    |17.22    |44.25
 |YOLOv7s      |640  |43.1   |60.1   |69.6     |55.3    |2.3    |8.66    |23.69
-|YOLOv7Xs      |640  |44.5   |62.5   |71.8     |56.5    |2.4    |9.47    |28.48
-|YOLOv5l      |640  |49.1   |66.1   |74.2     |61    |6.2    |46.56    |109.59
-|YOLOv7      |640  |51.5   |69.1   |72.6     |63.5    |6.8    |37.62    |106.47
+|[**YOLOv7s SimOTA**](https://github.com/AlibabaResearch/efficientteacher/releases/download/1.0/efficient-yolov7s-simota.pt)      |640  |44.5   |62.5   |71.8     |56.5    |2.4    |9.47    |28.48
+|[**YOLOv5l**](https://github.com/AlibabaResearch/efficientteacher/releases/download/1.0/efficient-yolov5l.pt)      |640  |49.1   |66.1   |74.2     |61    |6.2    |46.56    |109.59
+|[**YOLOv7**](https://github.com/AlibabaResearch/efficientteacher/releases/download/1.0/efficient-yolov7.pt)      |640  |51.5   |69.1   |72.6     |63.5    |6.8    |37.62    |106.47
 
 
 ### MS-COCO SSOD
