@@ -28,7 +28,25 @@ If you are already familiar with the YOLOv5 open-source framework and have your 
 
 
 Efficient Teacher's detection algorithms trained on various open source datasets and business-owned datasets have good performance in accuracy and speed.
+
+### MS-COCO SSOD additional
+|Model |Dataset|size<br><sup>(pixels)|mAP<sup>val<br>0.5:0.95 |Speed<br><sup>V100<br>Pytorch<br>b32<br>FP32<br>(ms)|params<br><sup>(M) |FLOPs<br><sup>@640 (G)
+|---  |---    |---                  |---  |---    |---    |---   
+|YOLOv5l<br>Supervised|train2017|640 | 49.01  |6.2    |46.56    |109.59
+|[**YOLOv5l<br>Efficient Teacher**](https://github.com/AlibabaResearch/efficientteacher/releases/download/1.0/efficient-yolov5l-ssod.pt)   |train2017 + unlabeled2017|640 | **50.45**  |6.2    |46.56    |109.59
   
+### MS-COCO SSOD standard
+|Model |Dataset|size<br><sup>(pixels)|mAP<sup>val<br>0.5:0.95 |Speed<br><sup>V100<br>Pytorch<br>b32<br>FP32<br>(ms)|params<br><sup>(M) |FLOPs<br><sup>@640 (G)
+|---  |---    |---                  |---  |---    |---    |---   
+|YOLOv5l<br>Supervised|1% labeled|640 | 9.91  |6.2    |46.56    |109.59
+|YOLOv5l<br>Efficient Teacher   |1% labeled|640 | **23.8**  |6.2    |46.56    |109.59
+|YOLOv5l<br>Supervised|2% labeled|640 | 14.01  |6.2    |46.56    |109.59
+|YOLOv5l<br>Efficient Teacher|2% labeled|640 | **28.7**  |6.2    |46.56    |109.59
+|YOLOv5l<br>Supervised|5% labeled|640 | 23.75  |6.2    |46.56    |109.59
+|YOLOv5l<br>Efficient Teacher|5% labeled|640 | **34.1**  |6.2    |46.56    |109.59
+|YOLOv5l<br>Supervised|10% labeled|640 | 28.45  |6.2    |46.56    |109.59
+|YOLOv5l<br>Efficient Teacher|10% labeled|640 | **37.9**  |6.2    |46.56    |109.59
+
 ### MS-COCO
 |Model |size<br><sup>(pixels) |mAP<sup>val<br>0.5:0.95 |mAP<sup>val<br>0.5 |Precision<br><sup><br> |Recall<br><sup><br>|Speed<br><sup>V100<br>Pytorch<br>b32<br>FP32<br>(ms) |params<br><sup>(M) |FLOPs<br><sup>@640 (G)
 |---                    |---  |---    |---    |---    |---    |---    |---    |---
@@ -49,17 +67,6 @@ Efficient Teacher's detection algorithms trained on various open source datasets
 |[**YOLOv7**](https://github.com/AlibabaResearch/efficientteacher/releases/download/1.0/efficient-yolov7.pt)      |640  |51.5   |69.1   |72.6     |63.5    |6.8    |37.62    |106.47
 
 
-### MS-COCO SSOD
-|Model |Dataset|size<br><sup>(pixels)|mAP<sup>val<br>0.5:0.95 |Speed<br><sup>V100<br>Pytorch<br>b32<br>FP32<br>(ms)|params<br><sup>(M) |FLOPs<br><sup>@640 (G)
-|---  |---    |---                  |---  |---    |---    |---   
-|YOLOv5l<br>Supervised|1% labeled|640 | 9.91  |6.2    |46.56    |109.59
-|YOLOv5l<br>Efficient Teacher   |1% labeled|640 | **23.8**  |6.2    |46.56    |109.59
-|YOLOv5l<br>Supervised|2% labeled|640 | 14.01  |6.2    |46.56    |109.59
-|YOLOv5l<br>Efficient Teacher|2% labeled|640 | **28.7**  |6.2    |46.56    |109.59
-|YOLOv5l<br>Supervised|5% labeled|640 | 23.75  |6.2    |46.56    |109.59
-|YOLOv5l<br>Efficient Teacher|5% labeled|640 | **34.1**  |6.2    |46.56    |109.59
-|YOLOv5l<br>Supervised|10% labeled|640 | 28.45  |6.2    |46.56    |109.59
-|YOLOv5l<br>Efficient Teacher|10% labeled|640 | **37.9**  |6.2    |46.56    |109.59
 
 ### Reproduce the COCO SSOD experimental results.
 - First, you need to download the images and labels of the COCO dataset and process them into the default format of YOLOv5 (which should be familiar to you).
