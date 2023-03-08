@@ -26,13 +26,12 @@ If you are already familiar with the YOLOv5 open-source framework and have your 
 - You can use the existing datasets and annotations tailored specifically for YOLOv5 without any format adjustment
 - With a simple modification of the YAML configuration file, you can convert the training network from **YOLOv5** to **YOLOX/YOLOv6/YOLOv7/YOLOv8** with the same verification indicators as YOLOv5, making it easier to understand whether the new network structure is really effective for your task.
 
-
-Efficient Teacher's detection algorithms trained on various open source datasets and business-owned datasets have good performance in accuracy and speed.
+Below are the results of the YOLOv5l trained using Efficient Teacher. We did not make any modicications to the YOLOv5l structure, but instead designed some training modules to help the network generate pseudo-labels for unlabeled data and learn effective information from these pseudo-labels. Efficient Teacher can improve the mAP<sup>val<br>0.5:0.95 of standard YOLOv5l from 49.00 to 50.45 using unlabeled data on the COCO dataset.
 
 ### MS-COCO SSOD additional
 |Model |Dataset|size<br><sup>(pixels)|mAP<sup>val<br>0.5:0.95 |Speed<br><sup>V100<br>Pytorch<br>b32<br>FP32<br>(ms)|params<br><sup>(M) |FLOPs<br><sup>@640 (G)
 |---  |---    |---                  |---  |---    |---    |---   
-|YOLOv5l<br>Supervised|train2017|640 | 49.01  |6.2    |46.56    |109.59
+|[**YOLOv5l<br>Supervised**]()|train2017|640 | 49.00  |6.2    |46.56    |109.59
 |[**YOLOv5l<br>Efficient Teacher**](https://github.com/AlibabaResearch/efficientteacher/releases/download/1.0/efficient-yolov5l-ssod.pt)   |train2017 + unlabeled2017|640 | **50.45**  |6.2    |46.56    |109.59
   
 ### MS-COCO SSOD standard
@@ -46,6 +45,8 @@ Efficient Teacher's detection algorithms trained on various open source datasets
 |YOLOv5l<br>Efficient Teacher|5% labeled|640 | **34.1**  |6.2    |46.56    |109.59
 |YOLOv5l<br>Supervised|10% labeled|640 | 28.45  |6.2    |46.56    |109.59
 |YOLOv5l<br>Efficient Teacher|10% labeled|640 | **37.9**  |6.2    |46.56    |109.59
+
+We also provide variouss solutions implemented with supervised training. Below are the performance results of various detectors trained using the current library.
 
 ### MS-COCO
 |Model |size<br><sup>(pixels) |mAP<sup>val<br>0.5:0.95 |mAP<sup>val<br>0.5 |Precision<br><sup><br> |Recall<br><sup><br>|Speed<br><sup>V100<br>Pytorch<br>b32<br>FP32<br>(ms) |params<br><sup>(M) |FLOPs<br><sup>@640 (G)
@@ -63,7 +64,7 @@ Efficient Teacher's detection algorithms trained on various open source datasets
 |YOLOv6s      |640  |42.2   |60.2   |67.9     |56.3    |1.9    |17.22    |44.25
 |YOLOv7s      |640  |43.1   |60.1   |69.6     |55.3    |2.3    |8.66    |23.69
 |[**YOLOv7s SimOTA**](https://github.com/AlibabaResearch/efficientteacher/releases/download/1.0/efficient-yolov7s-simota.pt)      |640  |44.5   |62.5   |71.8     |56.5    |2.4    |9.47    |28.48
-|[**YOLOv5l**](https://github.com/AlibabaResearch/efficientteacher/releases/download/1.0/efficient-yolov5l.pt)      |640  |49.1   |66.1   |74.2     |61    |6.2    |46.56    |109.59
+|[**YOLOv5l**](https://github.com/AlibabaResearch/efficientteacher/releases/download/1.0/efficient-yolov5l.pt)      |640  |49.0   |66.1   |74.2     |61    |6.2    |46.56    |109.59
 |[**YOLOv7**](https://github.com/AlibabaResearch/efficientteacher/releases/download/1.0/efficient-yolov7.pt)      |640  |51.5   |69.1   |72.6     |63.5    |6.8    |37.62    |106.47
 
 
