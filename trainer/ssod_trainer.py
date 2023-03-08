@@ -134,10 +134,24 @@ class SSODTrainer(Trainer):
         self.start_epoch = 0
         pretrained = cfg.weights.endswith('.pt')
         if pretrained:
+            if ckpt['optimizer'] is not None:
+                try:
+                    self.optimizer.load_state_dict(ckpt['optimizer'])
+                except:
+                    LOGGER.info('pretrain model with different type of optimizer')
+                # best_fitness = ckpt['best_fitness']
+
             # EMA
             if self.ema and ckpt.get('ema'):
-                self.ema.ema.load_state_dict(ckpt['ema'].float().state_dict(), strict=False)
-                self.ema.updates = ckpt['updates']
+                try:
+                    self.ema.ema.load_state_dict(ckpt['ema'].float().state_dict())
+                    self.ema.updates = ckpt['updates']
+                except:
+                    LOGGER.info('pretrain model with different type of ema')
+            # EMA
+            # if self.ema and ckpt.get('ema'):
+            #     self.ema.ema.load_state_dict(ckpt['ema'].float().state_dict(), strict=False)
+            #     self.ema.updates = ckpt['updates']
 
             # Epochs
             self.start_epoch = ckpt['epoch'] + 1

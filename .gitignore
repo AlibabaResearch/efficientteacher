@@ -127,6 +127,7 @@ work_dirs/
 *.py~
 *.sh~
 *.sh
+*.swp
 
 custom_configs
 runs
