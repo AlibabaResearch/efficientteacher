@@ -45,6 +45,7 @@ def convert_yolov5_to_efficient(pt_path='', cfg_path='', save_path='', map_path=
 
         ckpt['model'] = deepcopy(model)
         ckpt['ema'] = deepcopy(model)
+        ckpt['updates'] = 0
         torch.save(ckpt, save_path)
     
 
@@ -84,6 +85,7 @@ def convert_efficient_to_yolov5(mula_path='',  yolov5_path='', save_path='', map
 
         ckpt['model'] = deepcopy(yolov5_model)
         ckpt['ema'] = deepcopy(yolov5_model)
+        ckpt['updates'] = 0
         torch.save(ckpt, save_path)
 
 if __name__ == '__main__':
