@@ -144,7 +144,7 @@ Before we proceed with semi-supervised training, we need you to convert your own
     train_domain: True
     nms_conf_thres: 0.1
     nms_iou_thres: 0.65
-    teacher_loss_weight: 3.0
+    teacher_loss_weight: 1.0
     cls_loss_weight: 0.3
     box_loss_weight: 0.05
     obj_loss_weight: 0.7
