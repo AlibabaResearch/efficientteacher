@@ -26,7 +26,7 @@ If you are already familiar with the YOLOv5 open-source framework and have your 
 - You can use the existing datasets and annotations tailored specifically for YOLOv5 without any format adjustment
 - With a simple modification of the YAML configuration file, you can convert the training network from **YOLOv5** to **YOLOX/YOLOv6/YOLOv7/YOLOv8** with the same verification indicators as YOLOv5, making it easier to understand whether the new network structure is really effective for your task.
 
-Below are the results of the YOLOv5l trained using Efficient Teacher. We did not make any modicications to the YOLOv5l structure, but instead designed some training modules to help the network generate pseudo-labels for unlabeled data and learn effective information from these pseudo-labels. Efficient Teacher can improve the mAP<sup>val<br>0.5:0.95 of standard YOLOv5l from 49.00 to 50.45 using unlabeled data on the COCO dataset.
+Below are the results of the YOLOv5l trained using Efficient Teacher. We did not make any modicications to the YOLOv5l structure, but instead designed some training modules to help the network generate pseudo-labels for unlabeled data and learn effective information from these pseudo-labels. Efficient Teacher can improve the mAP<sup>val</sup> of standard YOLOv5l from 49.00 to **50.45** using unlabeled data on the COCO dataset.
 
 ### MS-COCO SSOD additional
 |Model |Dataset|size<br><sup>(pixels)|mAP<sup>val<br>0.5:0.95 |Speed<br><sup>V100<br>Pytorch<br>b32<br>FP32<br>(ms)|params<br><sup>(M) |FLOPs<br><sup>@640 (G)

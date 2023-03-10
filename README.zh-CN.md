@@ -23,7 +23,7 @@ Efficient Teacher算法的使用场景
 除此之外，当您已经熟悉了我们的YAML编写规则，那么您也可以通过简单修改几行配置文件，将您的训练模型从YOLOv5迁移到YOLOX/YOLOv6/YOLOv7/YOLOv8，这些训练出来的模型运行的是同样的验证代码，所以您可以很轻易地判断出来新的网络结构是否适合您当前的检测任务。
 
 
-下面是我们利用efficientteacher库使用半监督训练出来的YOLOv5l检测器的效果，我们没有对YOLOv5l结构做任何修改，仅仅是设计了一些训练模块来帮助网络针对没有标签的数据生成伪标签并从伪标签中学到真正有效的信息，Efficient Teacher可以在COCO数据集上实现利用unlabeled数据集将标准YOLOv5l从49.00提升到50.45。
+下面是我们利用efficientteacher库使用半监督训练出来的YOLOv5l检测器的效果，我们没有对YOLOv5l结构做任何修改，仅仅是设计了一些训练模块来帮助网络针对没有标签的数据生成伪标签并从伪标签中学到真正有效的信息，Efficient Teacher可以在COCO数据集上实现利用unlabeled数据集将标准YOLOv5l的mAP从49.00提升到50.45。
 
 ### MS-COCO SSOD additional
 |Model |Dataset|size<br><sup>(pixels)|mAP<sup>val<br>0.5:0.95 |Speed<br><sup>V100<br>Pytorch<br>b32<br>FP32<br>(ms)|params<br><sup>(M) |FLOPs<br><sup>@640 (G)

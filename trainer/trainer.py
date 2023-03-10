@@ -28,6 +28,7 @@ from utils.general import labels_to_class_weights, init_seeds, \
     strip_optimizer, check_img_size, check_suffix, one_cycle, colorstr, methods
 from utils.downloads import attempt_download
 from models.loss.loss import ComputeLoss, ComputeNanoLoss
+from models.loss.yolox_loss import ComputeFastXLoss
 from utils.plots import plot_labels
 from utils.torch_utils import ModelEMA, de_parallel, intersect_dicts, torch_distributed_zero_first, is_parallel
 from utils.metrics import MetricMeter, fitness
@@ -318,6 +319,8 @@ class Trainer:
 
         if cfg.Loss.type == 'ComputeLoss': 
             self.compute_loss = ComputeLoss(self.model, cfg)  # init loss class
+        elif cfg.Loss.type == 'ComputeFastXLoss':
+            self.compute_loss = ComputeFastXLoss(self.model, cfg)
         elif cfg.Loss.type == 'ComputeNanoLoss':
             self.compute_loss = ComputeNanoLoss(self.model, cfg)
         else:

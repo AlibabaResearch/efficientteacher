@@ -54,9 +54,9 @@ class Model(nn.Module):
         # self.names = [str(i) for i in range(self.yaml['nc'])]  # default names
         self.names = cfg.Dataset.names # default names
         self.inplace = self.cfg.Model.inplace
-        self.loss_fn = self.cfg.Loss.type
-        if self.loss_fn is not None:
-            self.loss_fn = eval(self.loss_fn) if isinstance(self.loss_fn, str) else None  # eval strings
+        # self.loss_fn = self.cfg.Loss.type
+        # if self.loss_fn is not None:
+        #     self.loss_fn = eval(self.loss_fn) if isinstance(self.loss_fn, str) else None  # eval strings
         # LOGGER.info([x.shape for x in self.forward(torch.zeros(1, ch, 64, 64))])
 
         # Build strides, anchors
