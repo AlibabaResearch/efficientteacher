@@ -123,11 +123,11 @@ class Model(nn.Module):
         out = self.head(x)
 
         f8, f16, f32 = x
-        # out_8  = self.det_8(GradReverse.apply(f8))
-        # out_16 = self.det_16(GradReverse.apply(f16))
-        # out_32 = self.det_32(GradReverse.apply(f32))
-        # feature = [out_8, out_16, out_32]
-        feature = [f8, f16, f32]
+        out_8  = self.det_8(GradReverse.apply(f8))
+        out_16 = self.det_16(GradReverse.apply(f16))
+        out_32 = self.det_32(GradReverse.apply(f32))
+        feature = [out_8, out_16, out_32]
+        # feature = [f8, f16, f32]
 
         return out, feature
 

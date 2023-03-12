@@ -120,15 +120,15 @@ class SSODTrainer(Trainer):
                 print(f'freezing {k}')
                 v.requires_grad = False
         # EMA
-        # 发现需要先burn_in
+        self.ema = ModelEMA(self.model)        
         if self.cfg.hyp.burn_epochs > 0:
-            self.ema = ModelEMA(self.model)        
+            self.semi_ema = None
             # self.ema = ModelEMA(self.model, decay=self.cfg.SSOD.ema_rate)
         else:
             if self.cosine_ema:
-                self.ema = CosineEMA(self.model,decay_start=self.cfg.SSOD.ema_rate, total_epoch=self.epochs)
+                self.semi_ema = CosineEMA(self.ema.ema, decay_start=self.cfg.SSOD.ema_rate, total_epoch=self.epochs)
             else:
-                self.ema = SemiSupModelEMA(self.model, self.cfg.SSOD.ema_rate)
+                self.semi_ema = SemiSupModelEMA(self.ema.ema, self.cfg.SSOD.ema_rate)
 
         # Resume
         self.start_epoch = 0
@@ -143,11 +143,11 @@ class SSODTrainer(Trainer):
 
             # EMA
             if self.ema and ckpt.get('ema'):
-                try:
-                    self.ema.ema.load_state_dict(ckpt['ema'].float().state_dict())
-                    self.ema.updates = ckpt['updates']
-                except:
-                    LOGGER.info('pretrain model with different type of ema')
+                self.ema.ema.load_state_dict(ckpt['ema'].float().state_dict(), strict=False)
+                self.ema.updates = ckpt['updates']
+            
+            if self.semi_ema and ckpt.get('ema'):
+                self.semi_ema.ema.load_state_dict(ckpt['ema'].float().state_dict(), strict=False)
             # EMA
             # if self.ema and ckpt.get('ema'):
             #     self.ema.ema.load_state_dict(ckpt['ema'].float().state_dict(), strict=False)
@@ -163,6 +163,7 @@ class SSODTrainer(Trainer):
 
             del ckpt, csd
         self.epoch = self.start_epoch
+        # self.ema.update_decay(self.epoch, self.cfg.hyp.burn_epochs)
         self.model_type = self.model.model_type
 
         # load teacher model and extract class idx
@@ -300,8 +301,8 @@ class SSODTrainer(Trainer):
             if self.RANK in [-1, 0]:
                 print('burn_in_epoch: {}, cur_epoch: {}'.format(self.cfg.hyp.burn_epochs, self.epoch) )
         else:
-            #利用burn_in阶段的ema权重生成一个ssod的ema
-            if self.epoch == self.cfg.hyp.burn_epochs and self.cfg.hyp.burn_epochs > 0:
+            # if self.epoch == self.cfg.hyp.burn_epochs and self.cfg.hyp.burn_epochs > 0:
+            if self.epoch == self.cfg.hyp.burn_epochs:
                 msd = self.model.module.state_dict() if is_parallel(self.model) else self.model.state_dict()  # model state_dict
                 for k, v in self.ema.ema.state_dict().items():
                     if v.dtype.is_floating_point:
@@ -310,9 +311,9 @@ class SSODTrainer(Trainer):
                     #     print('ema:', v)
                     #     print('msd:', msd[k])
                 if self.cosine_ema:
-                    self.ema = CosineEMA(self.ema.ema, decay_start=self.cfg.SSOD.ema_rate, total_epoch=self.epochs - self.cfg.hyp.burn_epochs)
+                    self.semi_ema = CosineEMA(self.ema.ema, decay_start=self.cfg.SSOD.ema_rate, total_epoch=self.epochs - self.cfg.hyp.burn_epochs)
                 else:
-                    self.ema = SemiSupModelEMA(self.ema.ema, self.cfg.SSOD.ema_rate)
+                    self.semi_ema = SemiSupModelEMA(self.ema.ema, self.cfg.SSOD.ema_rate)
             self.train_with_unlabeled(callbacks)
     
     def after_epoch(self, callbacks, val):
@@ -325,7 +326,7 @@ class SSODTrainer(Trainer):
             if self.model_type == 'tal':
                 self.compute_un_sup_loss.cur_epoch = self.epoch - self.cfg.hyp.burn_epochs
             if self.cosine_ema:
-                self.ema.update_decay(self.epoch - self.cfg.hyp.burn_epochs)
+                self.semi_ema.update_decay(self.epoch - self.cfg.hyp.burn_epochs)        
         if self.RANK in [-1, 0]:
             # mAP
             callbacks.run('on_train_epoch_end', epoch=self.epoch)
@@ -333,8 +334,9 @@ class SSODTrainer(Trainer):
             final_epoch = (self.epoch + 1 == self.epochs)
             if not self.noval or final_epoch:  # Calculate mAP
                 val_ssod = self.cfg.SSOD.train_domain
-                if (self.epoch >= self.cfg.hyp.burn_epochs):
-                    self.results, maps, _, cls_thr = val.run(self.data_dict,
+                # if (self.epoch >= self.cfg.hyp.burn_epochs):
+                # if (1):
+                self.results, maps, _, cls_thr = val.run(self.data_dict,
                                            batch_size=self.batch_size // self.WORLD_SIZE * 2,
                                            imgsz=self.imgsz,
                                            model=deepcopy(de_parallel(self.model)),
@@ -348,8 +350,24 @@ class SSODTrainer(Trainer):
                                            num_points=self.cfg.Dataset.np,
                                            val_ssod=val_ssod,
                                            val_kp=self.cfg.Dataset.val_kp)
-                    self.model.train()
-                self.results, maps, _, cls_thr = val.run(self.data_dict,
+                self.model.train()
+                if (self.epoch >= self.cfg.hyp.burn_epochs):
+                    self.results, maps, _, cls_thr = val.run(self.data_dict,
+                                           batch_size=self.batch_size // self.WORLD_SIZE * 2,
+                                           imgsz=self.imgsz,
+                                           model=self.semi_ema.ema,
+                                           conf_thres=self.cfg.val_conf_thres, 
+                                           single_cls=self.single_cls,
+                                           dataloader=self.val_loader,
+                                           save_dir=self.save_dir,
+                                           plots=False,
+                                           callbacks=callbacks,
+                                           compute_loss=self.compute_loss,
+                                           num_points = self.cfg.Dataset.np,
+                                           val_ssod=val_ssod,
+                                           val_kp=self.cfg.Dataset.val_kp)
+                else:
+                    self.results, maps, _, cls_thr = val.run(self.data_dict,
                                            batch_size=self.batch_size // self.WORLD_SIZE * 2,
                                            imgsz=self.imgsz,
                                            model=self.ema.ema,
@@ -373,7 +391,16 @@ class SSODTrainer(Trainer):
 
             # Save model
             if (not self.nosave) or (final_epoch):  # if save
-                ckpt = {'epoch': self.epoch,
+                if self.epoch >= self.cfg.hyp.burn_epochs:
+                    ckpt = {'epoch': self.epoch,
+                        'best_fitness': self.best_fitness,
+                        'model': deepcopy(de_parallel(self.model)).half(),
+                        'ema': deepcopy(self.semi_ema.ema).half(),
+                        'updates': self.ema.updates,
+                        'optimizer': self.optimizer.state_dict(),
+                        'wandb_id':  None}
+                else:
+                    ckpt = {'epoch': self.epoch,
                         'best_fitness': self.best_fitness,
                         'model': deepcopy(de_parallel(self.model)).half(),
                         'ema': deepcopy(self.ema.ema).half(),
@@ -455,8 +482,9 @@ class SSODTrainer(Trainer):
             self.scaler.step(self.optimizer)  # optimizer.step
             self.scaler.update()
             self.optimizer.zero_grad()
-            if self.ema:
-                self.ema.update(self.model)
+            self.ema.update(self.model)
+            if self.semi_ema:
+                self.semi_ema.update(self.ema.ema)
             self.last_opt_step = ni
 
     def train_without_unlabeled_da(self, callbacks):

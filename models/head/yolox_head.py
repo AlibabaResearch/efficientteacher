@@ -101,12 +101,12 @@ class YoloXDetect(nn.Module):
         # self.num_decouple = 2
         # print('num_decouple:', num_decouple)
         for i in range(self.num_decouple):
-            self.cls0.append(Conv(self.dec_channel, self.dec_channel, 3, 1))
-            self.reg0.append(Conv(self.dec_channel, self.dec_channel, 3, 1))
-            self.cls1.append(Conv(self.dec_channel, self.dec_channel, 3, 1))
-            self.reg1.append(Conv(self.dec_channel, self.dec_channel, 3, 1))
-            self.cls2.append(Conv(self.dec_channel, self.dec_channel, 3, 1))
-            self.reg2.append(Conv(self.dec_channel, self.dec_channel, 3, 1))
+            self.cls0.append(Conv(self.dec_channel, self.dec_channel, 3, 1, act=CONV_ACT))
+            self.reg0.append(Conv(self.dec_channel, self.dec_channel, 3, 1, act=CONV_ACT))
+            self.cls1.append(Conv(self.dec_channel, self.dec_channel, 3, 1, act=CONV_ACT))
+            self.reg1.append(Conv(self.dec_channel, self.dec_channel, 3, 1, act=CONV_ACT))
+            self.cls2.append(Conv(self.dec_channel, self.dec_channel, 3, 1, act=CONV_ACT))
+            self.reg2.append(Conv(self.dec_channel, self.dec_channel, 3, 1, act=CONV_ACT))
 
         # self.only_bbox = False 
         if self.num_decouple == 0:
