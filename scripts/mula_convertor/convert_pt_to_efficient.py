@@ -41,8 +41,8 @@ def convert_yolov5_to_efficient(pt_path='', cfg_path='', save_path='', map_path=
         print('load weights from u-yolov5...')
         model.load_state_dict(new_yolov5s_weight,strict=False)
 
-        ckpt['model'] = deepcopy(model)
-        ckpt['ema'] = deepcopy(model)
+        ckpt['model'] = deepcopy(model.half())
+        ckpt['ema'] = ckpt['model']
         ckpt['updates'] = 0
         torch.save(ckpt, save_path)
     
@@ -81,11 +81,11 @@ def convert_efficient_to_yolov5(efficient_path='',  yolov5_path='', save_path=''
 
         yolov5_model.load_state_dict(ori_yolov5s_weight, strict=False)
 
-        yolov5_ckpt['model'] = deepcopy(yolov5_model)
         yolov5_ckpt['ema'] = deepcopy(yolov5_model)
+        yolov5_ckpt['model'] = yolov5_ckpt['ema']
         # ckpt['updates'] = 0
         torch.save(yolov5_ckpt, save_path)
 
 if __name__ == '__main__':
     convert_yolov5_to_efficient( 'yolov5s.pt', 'efficientteacher/configs/sup/public/yolov5s_coco.yaml','efficient-yolov5s.pt')
-    # convert_efficient_to_yolov5('efficient-yolov5s.pt', yolov5_path='yolov5s.pt', save_path='test.pt')
+    # convert_efficient_to_yolov5('efficient-yolov5m.pt', yolov5_path='yolov5m.pt', save_path='test.pt')
