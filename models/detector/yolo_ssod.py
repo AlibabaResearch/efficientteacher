@@ -20,9 +20,9 @@ from models.backbone.common import *
 from models.backbone.experimental import *
 from models.head.yolox_head import YoloXDetect
 from models.head.yolov5_head import Detect
+from models.head.yolov7_head import IDetect
 from models.head.yolov6_head import YoloV6Detect
 from models.head.yolov8_head import YoloV8Detect
-# from models.head.tood import DetectTooD 
 from models.head.retina_head import RetinaDetect
 from utils.autoanchor import check_anchor_order
 from utils.general import check_yaml, make_divisible, print_args, set_logging
@@ -30,7 +30,6 @@ from utils.plots import feature_visualization
 from utils.torch_utils import copy_attr, fuse_conv_and_bn, initialize_weights, model_info, scale_img, \
     select_device, time_sync
 from models.loss.loss import *
-# from models.head.yolov5_head import Detect
 from ..backbone import build_backbone
 from ..neck import build_neck
 from ..head import build_head
@@ -54,10 +53,6 @@ class Model(nn.Module):
         # self.names = [str(i) for i in range(self.yaml['nc'])]  # default names
         self.names = cfg.Dataset.names # default names
         self.inplace = self.cfg.Model.inplace
-        # self.loss_fn = self.cfg.Loss.type
-        # if self.loss_fn is not None:
-        #     self.loss_fn = eval(self.loss_fn) if isinstance(self.loss_fn, str) else None  # eval strings
-        # LOGGER.info([x.shape for x in self.forward(torch.zeros(1, ch, 64, 64))])
 
         # Build strides, anchors
         self.model_type = 'yolov5'
@@ -76,7 +71,7 @@ class Model(nn.Module):
 
     def check_head(self):
         m = self.head  # Detect()
-        if isinstance(m, (Detect, RetinaDetect)):
+        if isinstance(m, (Detect, RetinaDetect, IDetect)):
             s = 256  # 2x min stride
             m.inplace = self.inplace
             # m.num_keypoints = self.num_keypoints
@@ -85,15 +80,6 @@ class Model(nn.Module):
             check_anchor_order(m)
             self.stride = m.stride
             m.initialize_biases()  # only run once
-        # if isinstance(m, RetinaDetect):
-        #     s = 256  # 2x min stride
-        #     m.inplace = self.inplace
-        #     m.stride = torch.Tensor([8, 16, 32])
-        #     m.anchors /= m.stride.view(-1, 1, 1)
-        #     check_anchor_order(m)
-        #     self.stride = m.stride
-        #     self._initialize_retina_biases()  # only run once
-            # LOGGER.info('Strides: %s' % m.stride.tolist())
         elif isinstance(m, (YoloV6Detect, YoloV8Detect)):
             m.inplace = self.inplace
             self.stride = torch.tensor(m.stride)

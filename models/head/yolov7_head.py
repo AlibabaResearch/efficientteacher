@@ -4,6 +4,7 @@ import torch.nn as nn
 from utils.general import check_version
 from models.backbone.common import ImplicitA
 from models.backbone.common import ImplicitM
+import math
 
 class IDetect(nn.Module):
     stride = None  # strides computed during build
@@ -28,15 +29,19 @@ class IDetect(nn.Module):
         self.ia = nn.ModuleList(ImplicitA(x) for x in ch)
         self.im = nn.ModuleList(ImplicitM(self.no * self.na) for _ in ch)
         self.export = False
+        self.num_keypoints = cfg.Dataset.np
 
     def forward(self, x):
         # x = x.copy()  # for profiling
+        list_x = []
+        for _ in x:
+            list_x.append(_)
+        x = list_x
         z = []  # inference output
         self.training |= self.export
         for i in range(self.nl):
             x[i] = self.m[i](self.ia[i](x[i]))  # conv
             x[i] = self.im[i](x[i])
-            x[i] = self.m[i](x[i])
             bs, _, ny, nx = x[i].shape  # x(bs,255,20,20) to x(bs,3,20,20,85)
             x[i] = x[i].view(bs, self.na, self.no, ny, nx).permute(0, 1, 3, 4, 2).contiguous()
 
@@ -55,3 +60,13 @@ class IDetect(nn.Module):
     def _make_grid(nx=20, ny=20):
         yv, xv = torch.meshgrid([torch.arange(ny), torch.arange(nx)])
         return torch.stack((xv, yv), 2).view((1, 1, ny, nx, 2)).float()
+    
+    def initialize_biases(self, cf=None):  # initialize biases into Detect(), cf is class frequency
+        # https://arxiv.org/abs/1708.02002 section 3.3
+        # cf = torch.bincount(torch.tensor(np.concatenate(dataset.labels, 0)[:, 0]).long(), minlength=nc) + 1.
+        # m = self.model[-1]  # Detect() module
+        for mi, s in zip(self.m, self.stride):  # from
+            b = mi.bias.view(self.na, -1)  # conv.bias(255) to (3,85)
+            b.data[:, 4] += math.log(8 / (640 / s) ** 2)  # obj (8 objects per 640 image)
+            b.data[:, 5:] += math.log(0.6 / (self.nc - 0.99)) if cf is None else torch.log(cf / cf.sum())  # cls
+            mi.bias = torch.nn.Parameter(b.view(-1), requires_grad=True)

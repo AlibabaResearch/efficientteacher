@@ -140,4 +140,4 @@ class YoloV7Neck(nn.Module):
         x52= self.repconv1(x37)
         x53= self.repconv2(x50)
 
-        return x51, x52, x53 
+        return x51, x52, x53

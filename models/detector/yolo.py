@@ -20,6 +20,7 @@ if str(ROOT) not in sys.path:
 from models.backbone.common import *
 from models.backbone.experimental import *
 from models.head.yolov5_head import Detect
+from models.head.yolov7_head import IDetect
 from models.head.yolov6_head import YoloV6Detect
 from models.head.yolov8_head import YoloV8Detect
 from models.head.yolox_head import YoloXDetect
@@ -52,9 +53,6 @@ class Model(nn.Module):
         # self.names = [str(i) for i in range(self.yaml['nc'])]  # default names
         self.names = cfg.Dataset.names # default names
         self.inplace = self.cfg.Model.inplace
-        # self.loss_fn = self.cfg.Loss.type
-        # if self.loss_fn is not None:
-        #     self.loss_fn = eval(self.loss_fn) if isinstance(self.loss_fn, str) else None  # eval strings
         # LOGGER.info([x.shape for x in self.forward(torch.zeros(1, ch, 64, 64))])
         # Build strides, anchors
         self.check_head()
@@ -67,7 +65,7 @@ class Model(nn.Module):
     def check_head(self):
         m = self.head  # Detect()
         self.model_type = 'yolov5'
-        if isinstance(m, (Detect, RetinaDetect)):
+        if isinstance(m, (Detect, RetinaDetect, IDetect)):
             s = 256  # 2x min stride
             m.inplace = self.inplace
             # m.num_keypoints = self.num_keypoints
@@ -93,39 +91,6 @@ class Model(nn.Module):
         x = self.head(x)
       
         return x
-
-    # def _initialize_biases(self, cf=None):  # initialize biases into Detect(), cf is class frequency
-    #     # https://arxiv.org/abs/1708.02002 section 3.3
-    #     # cf = torch.bincount(torch.tensor(np.concatenate(dataset.labels, 0)[:, 0]).long(), minlength=nc) + 1.
-    #     # m = self.backbone.model[-1]  # Detect() module
-    #     m = self.head  # Detect() module
-    #     for mi, s in zip(m.m, m.stride):  # from
-    #         b = mi.bias.view(m.na, -1)  # conv.bias(255) to (3,85)
-    #         b.data[:, 4] += math.log(8 / (640 / s) ** 2)  # obj (8 objects per 640 image)
-    #         b.data[:, 5:] += math.log(0.6 / (m.nc - 0.99)) if cf is None else torch.log(cf / cf.sum())  # cls
-    #         mi.bias = torch.nn.Parameter(b.view(-1), requires_grad=True)
-
-    # def _initialize_retina_biases(self, cf=None):  # initialize biases into Detect(), cf is class frequency
-    #     # https://arxiv.org/abs/1708.02002 section 3.3
-    #     # cf = torch.bincount(torch.tensor(np.concatenate(dataset.labels, 0)[:, 0]).long(), minlength=nc) + 1.
-    #     # m = self.backbone.model[-1]  # Detect() module
-    #     m = self.head  # Detect() module
-    #     for mi, s in zip(m.reg_m, m.stride):  # from
-    #         b = mi.bias.view(m.na, -1)  # conv.bias(255) to (3,85)
-    #         b.data[:, 4] += math.log(8 / (640 / s) ** 2)  # obj (8 objects per 640 image)
-    #         # b.data[:, 5:] += math.log(0.6 / (m.nc - 0.99)) if cf is None else torch.log(cf / cf.sum())  # cls
-    #         mi.bias = torch.nn.Parameter(b.view(-1), requires_grad=True)
-
-    #     for mi, s in zip(m.cls_m, m.stride):  # from
-    #         b = mi.bias.view(m.na, -1)  # conv.bias(255) to (3,85)
-    #         # b.data[:, 4] += math.log(8 / (640 / s) ** 2)  # obj (8 objects per 640 image)
-    #         b.data[:, :] += math.log(0.6 / (m.nc - 0.99)) if cf is None else torch.log(cf / cf.sum())  # cls
-    #         mi.bias = torch.nn.Parameter(b.view(-1), requires_grad=True)
-
-    # def _print_weights(self):
-    #     for m in self.backbone.modules():
-    #         if type(m) is Bottleneck:
-    #             LOGGER.info('%10.3g' % (m.w.detach().sigmoid() * 2))  # shortcut weights
 
     def fuse(self):  # fuse model Conv2d() + BatchNorm2d() layers
         LOGGER.info('Fusing layers... ')

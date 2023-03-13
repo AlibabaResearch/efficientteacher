@@ -30,7 +30,8 @@ Model:
     out_channels: [256, 512, 1024]
     activation: 'SiLU'
   Head: 
-    name: 'YoloV5'
+    name: 'YoloV7'
+    activation: 'SiLU'
   anchors: [[12,16, 19,36, 40,28],[36,75, 76,55, 72,146],[142,110, 192,243, 459,401]]  # P5/32]
 Loss:
   type: 'ComputeLoss'

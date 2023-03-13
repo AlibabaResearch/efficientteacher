@@ -49,8 +49,6 @@ class Detect(nn.Module):
         list_x = []
         for _ in x:
             list_x.append(_)
-        # x0, x1, x2 = x
-        # list_x = [x0, x1, x2]
         x = list_x
         class_range = list(range(5 + self.nc))
         for i in range(self.nl):

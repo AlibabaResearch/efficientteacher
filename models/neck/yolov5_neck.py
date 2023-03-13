@@ -87,9 +87,7 @@ class YoloV5Neck(nn.Module):
 
     def forward(self, inputs):
         P3, P4, P5 = inputs
-        # print('P3:', P3.shape)
-        # print('P4:', P4.shape)
-        # print('P5:', P5.shape)
+       
         xp_1 = self.conv1(P5)
         x1 = self.upsample1(xp_1)
         x1 = self.concat([x1, P4])
