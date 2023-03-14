@@ -44,24 +44,21 @@ Efficient Teacher算法的使用场景
 |YOLOv5l<br>Efficient Teacher|10% labeled|640 | **37.9**  |6.2    |46.56    |109.59
 
 下面是一些我们用Efficient Teacher库训练出来的网络结果，它们都遵从同样的准确率计算代码和计算量统计代码，能够帮助您在方案选型时有一个基本的判断。
-### MS-COCO
 |Model |size<br><sup>(pixels) |mAP<sup>val<br>0.5:0.95 |mAP<sup>val<br>0.5 |Precision<br><sup><br> |Recall<br><sup><br>|Speed<br><sup>V100<br>Pytorch<br>b32<br>FP32<br>(ms) |params<br><sup>(M) |FLOPs<br><sup>@640 (G)
 |---                    |---  |---    |---    |---    |---    |---    |---    |---
 |Nanodetm      |320  |20.2   |33.4   |47.8     |33.7    |0.6    |0.9593    | 0.730
-|YOLOv5n      |320  |20.5   |34.6   |49.8     |33.3    |0.4    |1.87    | 1.12
-|YOLOXn      |320  |24.2   |38.4   |55.7     |36.5   |0.5    |2.02    | 1.39
-|YOLOv6n RepOpt TAL     |640  |34.4   |49.3   |61.1     |45.8    |0.9   |4.34    |11.26
-|YOLOv5s ReLU|640  |36.0   |54.2   |66.4     |50.0    |1.6    |7.2    |16.5
-|[**YOLOv5s**](https://github.com/AlibabaResearch/efficientteacher/releases/download/1.0/efficient-yolov5s.pt)|640  |37.4   |56.8   |68.1     |50.9    |1.6    |7.2    |16.5
+|[**YOLOv5n**]((https://github.com/AlibabaResearch/efficientteacher/releases/download/1.0/efficient-yolov5n.pt))      |320  |20.5   |34.6   |49.8     |33.3    |0.4    |1.87    | 1.12
+|YOLOXn  |320  |24.2   |38.4   |55.7     |36.5   |0.5    |2.02    | 1.39
+|YOLOv6n |640  |34.4   |49.3   |61.1     |45.8    |0.9   |4.34    |11.26
+|[**YOLOv5s**](https://github.com/AlibabaResearch/efficientteacher/releases/download/1.0/efficient-yolov5s.pt)      |640  |37.4   |56.8   |68.1     |50.9    |1.6    |7.2    |16.5
 |YOLOXs      |640  |39.7   |59.6   |65.2     |56.0    |1.7    |8.04    |21.42
-|YOLOv6t RepOpt TAL     |640  |40.3   |56.5   |68.9     |50.5    |1.7    |9.72    |25.11
-|YOLOv6s RepOpt      |640  |41.7   |60.2   |66.9     |56.3    |1.9    |17.22    |44.25
-|YOLOv6s RepOpt TAL      |640  |42.1   |58.6   |69.1     |52.5    |1.9    |17.22    |44.25
-|YOLOv6s      |640  |42.2   |60.2   |67.9     |56.3    |1.9    |17.22    |44.25
-|YOLOv7s      |640  |43.1   |60.1   |69.6     |55.3    |2.3    |8.66    |23.69
+|YOLOv6t |640  |40.3   |56.5   |68.9     |50.5    |1.7    |9.72    |25.11
+|YOLOv6s |640  |42.1   |58.6   |69.1     |52.5    |1.9    |17.22    |44.25
+|YOLOv7s |640  |43.1   |60.1   |69.6     |55.3    |2.3    |8.66    |23.69
 |[**YOLOv7s SimOTA**](https://github.com/AlibabaResearch/efficientteacher/releases/download/1.0/efficient-yolov7s-simota.pt)      |640  |44.5   |62.5   |71.8     |56.5    |2.4    |9.47    |28.48
-|[**YOLOv5l**](https://github.com/AlibabaResearch/efficientteacher/releases/download/1.0/efficient-yolov5l.pt)|640  |49.0   |66.1   |74.2     |61    |6.2    |46.56    |109.59
-|[**YOLOv7**](https://github.com/AlibabaResearch/efficientteacher/releases/download/1.0/efficient-yolov7.pt)|640  |51.5   |69.1   |72.6     |63.5    |6.8    |37.62    |106.47
+|[**YOLOv5m**](https://github.com/AlibabaResearch/efficientteacher/releases/download/1.0/efficient-yolov5m.pt) | 640|45.4|64.1|72.4|57.6|4.8|21.17|48.97
+|[**YOLOv5l**](https://github.com/AlibabaResearch/efficientteacher/releases/download/1.0/efficient-yolov5l.pt)      |640  |49.0   |66.1   |74.2     |61    |6.2    |46.56    |109.59
+|[**YOLOv7**](https://github.com/AlibabaResearch/efficientteacher/releases/download/1.0/efficient-yolov7.pt)      |640  |51.5   |69.1   |72.6     |63.5    |6.8    |37.62    |106.47
 
 ### 复现我们的COCO半监督训练实验
 - 首先，请您下载YOLOv5提供的COCO数据集，他们已经帮您处理好标签格式，这会为您复现代码节约大量的时间
