@@ -6,9 +6,15 @@
 [![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/efficient-teacher-semi-supervised-object/semi-supervised-object-detection-on-coco-5)](https://paperswithcode.com/sota/semi-supervised-object-detection-on-coco-5?p=efficient-teacher-semi-supervised-object)
 [![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/efficient-teacher-semi-supervised-object/semi-supervised-object-detection-on-coco-1)](https://paperswithcode.com/sota/semi-supervised-object-detection-on-coco-1?p=efficient-teacher-semi-supervised-object)
 
+ **![new](https://img.alicdn.com/imgextra/i4/O1CN01kUiDtl1HVxN6G56vN_!!6000000000764-2-tps-43-19.png) [2023/03/14: We release pre-trained YOLOv5l on object365 and transfer learning recipe]**
+ * [**YOLOv5l on object365**](https://github.com/AlibabaResearch/efficientteacher/releases/download/1.0/efficient-yolov5-object365.pt)
+ * [**Crack your training task in 30 epochs**](https://github.com/AlibabaResearch/efficientteacher/wiki/Crack-your-training-task-with-semi-supervised-transfer-learning)
+
 Efficient Teacher is created by the Alibaba and used for tuning of both supervised and semi-supervised object detection(SSOD) algorithms.For more details, please refer to our [paper](https://arxiv.org/abs/2302.07577).
 
 Based on the YOLOv5 open source project, Efficient Teacher uses YACS and the latest network design to restructure key modules, so that it can achieve supervised and semi-supervised training for YOLOv5, YOLOX, YOLOv6, YOLOv7, and YOLOv8 using a single algorithm library.
+
+
 ### Why Efficient Teacher
 <!-- <img src="assets/efficient_teacher.png" width='600' height='300' align=center> -->
 
@@ -31,7 +37,7 @@ Below are the results of the YOLOv5l trained using Efficient Teacher. We did not
 ### MS-COCO SSOD additional
 |Model |Dataset|size<br><sup>(pixels)|mAP<sup>val<br>0.5:0.95 |Speed<br><sup>V100<br>Pytorch<br>b32<br>FP32<br>(ms)|params<br><sup>(M) |FLOPs<br><sup>@640 (G)
 |---  |---    |---                  |---  |---    |---    |---   
-|[**YOLOv5l<br>Supervised**]()|train2017|640 | 49.00  |6.2    |46.56    |109.59
+|[**YOLOv5l<br>Supervised**](https://github.com/AlibabaResearch/efficientteacher/releases/download/1.0/efficient-yolov5l.pt)|train2017|640 | 49.00  |6.2    |46.56    |109.59
 |[**YOLOv5l<br>Efficient Teacher**](https://github.com/AlibabaResearch/efficientteacher/releases/download/1.0/efficient-yolov5l-ssod.pt)   |train2017 + unlabeled2017|640 | **50.45**  |6.2    |46.56    |109.59
   
 ### MS-COCO SSOD standard

@@ -4,6 +4,10 @@
 [![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/efficient-teacher-semi-supervised-object/semi-supervised-object-detection-on-coco-5)](https://paperswithcode.com/sota/semi-supervised-object-detection-on-coco-5?p=efficient-teacher-semi-supervised-object)
 [![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/efficient-teacher-semi-supervised-object/semi-supervised-object-detection-on-coco-1)](https://paperswithcode.com/sota/semi-supervised-object-detection-on-coco-1?p=efficient-teacher-semi-supervised-object)
 
+ **![new](https://img.alicdn.com/imgextra/i4/O1CN01kUiDtl1HVxN6G56vN_!!6000000000764-2-tps-43-19.png) [2023/03/14: 我们开源了在object365上预训练的YOLOv5l权重来帮助您快速尝试使用Efficient Teacher来破解您的训练任务]**
+ * [**YOLOv5l on object365**](https://github.com/AlibabaResearch/efficientteacher/releases/download/1.0/efficient-yolov5-object365.pt)
+ * [**Crack your training task in 30 epochs**](https://github.com/AlibabaResearch/efficientteacher/wiki/Crack-your-training-task-with-semi-supervised-transfer-learning)
+
 Efficient Teacher是由阿里巴巴推出的用于研究针对YOLOv5的半监督目标检测算法(semi-supervised object detction)，对于技术设计方案感兴趣的朋友可以查看我们的[论文](https://arxiv.org/abs/2302.07577).
 
 我们开源出来的算法库是根据YOLOv5官方实现添加YACS进行重构的，当前的算法库可以完成YOLOv5的有监督和半监督训练，同时也能进行YOLOX/YOLOv6/YOLOv7/YOLOv8的有监督训练，所有的检测器训练后使用同样的参数进行验证，可以方便大家对比在同一个任务上采用不用的检测器带来的收益。
@@ -28,7 +32,7 @@ Efficient Teacher算法的使用场景
 ### MS-COCO SSOD additional
 |Model |Dataset|size<br><sup>(pixels)|mAP<sup>val<br>0.5:0.95 |Speed<br><sup>V100<br>Pytorch<br>b32<br>FP32<br>(ms)|params<br><sup>(M) |FLOPs<br><sup>@640 (G)
 |---  |---    |---                  |---  |---    |---    |---   
-|[**YOLOv5l<br>Supervised**]()|train2017|640 | 49.00  |6.2    |46.56    |109.59
+|[**YOLOv5l<br>Supervised**](https://github.com/AlibabaResearch/efficientteacher/releases/download/1.0/efficient-yolov5l.pt)|train2017|640 | 49.00  |6.2    |46.56    |109.59
 |[**YOLOv5l<br>Efficient Teacher**](https://github.com/AlibabaResearch/efficientteacher/releases/download/1.0/efficient-yolov5l-ssod.pt)   |train2017 + unlabeled2017|640 | **50.45**  |6.2    |46.56    |109.59
 
 ### MS-COCO SSOD
