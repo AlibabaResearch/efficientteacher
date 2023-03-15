@@ -1,0 +1,90 @@
+# EfficientTeacher by Alibaba Cloud 
+
+project: 'yolov5_ssod'
+adam: False
+epochs: 30
+weights: 'efficient-yolov5l-obj365.pt'
+prune_finetune: False
+linear_lr: True
+# find_unused_parameters: True
+
+hyp:
+  lr0: 0.001
+  hsv_h: 0.015
+  hsv_s: 0.7
+  hsv_v: 0.4
+  lrf: 1.0
+  scale: 0.9
+  burn_epochs: 10
+  no_aug_epochs: 0
+  # mixup: 0.1
+  warmup_epochs: 3
+
+Model:
+  depth_multiple: 1.00  # model depth multiple
+  width_multiple: 1.00  # layer channel multiple
+  Backbone: 
+    name: 'YoloV5'
+    activation: 'SiLU'
+  Neck: 
+    name: 'YoloV5' 
+    in_channels: [256, 512, 1024]
+    out_channels: [256, 512, 1024]
+    activation: 'SiLU'
+  Head: 
+    name: 'YoloV5'
+    activation: 'SiLU'
+  anchors: [[10,13, 16,30, 33,23],[30,61, 62,45, 59,119],[116,90, 156,198, 373,326]]  # P5/32]
+Loss:
+  type: 'ComputeLoss'
+  cls: 0.3
+  obj: 0.7
+  anchor_t: 4.0
+
+Dataset:
+  data_name: 'coco'
+  train: data/custom_train.txt  # 118287 images
+  val: data/custom_val.txt  # 5000 images
+  test: data/custom_val.txt # 20288 of 40670 images, submit to https://competitions.codalab.org/competitions/20794^
+  target: data/custom_unlabeled.txt
+  nc: 2  # number of classes
+  np: 0 #number of keypoints
+  names: [ 'rick', 'morty']
+  img_size: 640
+  batch_size: 128
+  sampler_type: 'class_balance'
+
+SSOD:
+  train_domain: True
+  nms_conf_thres: 0.1
+  nms_iou_thres: 0.65
+  teacher_loss_weight: 1.0
+  cls_loss_weight: 0.3
+  box_loss_weight: 0.05
+  obj_loss_weight: 0.7
+  loss_type: 'ComputeStudentMatchLoss'
+  ignore_thres_low: 0.1
+  ignore_thres_high: 0.6
+  uncertain_aug: True
+  use_ota: False
+  multi_label: False
+  ignore_obj: False
+  pseudo_label_with_obj: True
+  pseudo_label_with_bbox: True
+  pseudo_label_with_cls: False
+  with_da_loss: False
+  da_loss_weights: 0.01
+  epoch_adaptor: True
+  resample_high_percent: 0.25
+  resample_low_percent: 0.99
+  ema_rate: 0.999
+  cosine_ema: True
+  # dynamic_thres: True
+  ssod_hyp:
+    with_gt: False
+    mosaic: 1.0
+    cutout: 0.5
+    autoaugment: 0.5
+    scale: 0.8
+    degrees: 0.0
+    shear: 0.0

@@ -7,12 +7,12 @@ from pathlib import Path
 from models.detector.yolo import Model
 from configs.defaults import get_cfg
 import torch.nn as nn
+
 file = Path(__file__).resolve()
 parent, root, root1 = file.parent, file.parents[1], file.parents[2]
 sys.path.append(str(parent))
 
 
-#model = attempt_load(weights, map_location=device)
 def convert_yolov5_to_efficient(pt_path='', cfg_path='', save_path='', map_path='map.txt'):
         with open(map_path, 'r') as f:
             content = f.readlines()
@@ -89,8 +89,9 @@ def convert_efficient_to_yolov5(efficient_path='',  yolov5_path='', save_path=''
         detect_head.nc = ckpt['model'].head.nc
         detect_head.anchors = ckpt['model'].head.anchors
         detect_head.names = ckpt['model'].names
+        
 
-        yolov5_model.load_state_dict(ori_yolov5_weight, strict=True)
+        yolov5_model.load_state_dict(ori_yolov5_weight, strict=False)
 
         yolov5_ckpt['ema'] = deepcopy(yolov5_model)
         yolov5_ckpt['model'] = yolov5_ckpt['ema']
@@ -100,4 +101,3 @@ def convert_efficient_to_yolov5(efficient_path='',  yolov5_path='', save_path=''
 if __name__ == '__main__':
     # convert_yolov5_to_efficient( 'yolov5s.pt', 'efficientteacher/configs/sup/public/yolov5s_coco.yaml','efficient-yolov5s.pt')
     convert_efficient_to_yolov5('efficient-yolov5m.pt', yolov5_path='yolov5m.pt', save_path='test.pt')
-    # convert_efficient_to_yolov5('/home/bowen/exp22/weights/best.pt', yolov5_path='yolov5l.pt', save_path='test.pt')
