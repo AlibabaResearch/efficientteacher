@@ -37,6 +37,8 @@ Below are the results of the YOLOv5l trained using Efficient Teacher. We did not
 ### MS-COCO SSOD additional
 |Model |Dataset|size<br><sup>(pixels)|mAP<sup>val<br>0.5:0.95 |Speed<br><sup>V100<br>Pytorch<br>b32<br>FP32<br>(ms)|params<br><sup>(M) |FLOPs<br><sup>@640 (G)
 |---  |---    |---                  |---  |---    |---    |---   
+|[**YOLOv5s<br>Supervised**](https://github.com/AlibabaResearch/efficientteacher/releases/download/1.0/efficient-yolov5s.pt)|train2017|640 | 37.2  |1.6	| 7.2	| 16.5
+|[**YOLOv5s<br>Efficient Teacher**](https://github.com/AlibabaResearch/efficientteacher/releases/download/1.0/efficient-yolov5s-ssod.pt)   |train2017 + unlabeled2017|640 | **38.1**  |1.6    |7.2    |16.5
 |[**YOLOv5l<br>Supervised**](https://github.com/AlibabaResearch/efficientteacher/releases/download/1.0/efficient-yolov5l.pt)|train2017|640 | 49.00  |6.2    |46.56    |109.59
 |[**YOLOv5l<br>Efficient Teacher**](https://github.com/AlibabaResearch/efficientteacher/releases/download/1.0/efficient-yolov5l-ssod.pt)   |train2017 + unlabeled2017|640 | **50.45**  |6.2    |46.56    |109.59
   
@@ -61,7 +63,7 @@ We also provide variouss solutions implemented with supervised training. Below a
 |[**YOLOv5n**]((https://github.com/AlibabaResearch/efficientteacher/releases/download/1.0/efficient-yolov5n.pt))      |320  |20.5   |34.6   |49.8     |33.3    |0.4    |1.87    | 1.12
 |YOLOXn  |320  |24.2   |38.4   |55.7     |36.5   |0.5    |2.02    | 1.39
 |YOLOv6n |640  |34.4   |49.3   |61.1     |45.8    |0.9   |4.34    |11.26
-|[**YOLOv5s**](https://github.com/AlibabaResearch/efficientteacher/releases/download/1.0/efficient-yolov5s.pt)      |640  |37.4   |56.8   |68.1     |50.9    |1.6    |7.2    |16.5
+|[**YOLOv5s**](https://github.com/AlibabaResearch/efficientteacher/releases/download/1.0/efficient-yolov5s.pt)      |640  |37.2   |56.8   |68.1     |50.9    |1.6    |7.2    |16.5
 |YOLOXs      |640  |39.7   |59.6   |65.2     |56.0    |1.7    |8.04    |21.42
 |YOLOv6t |640  |40.3   |56.5   |68.9     |50.5    |1.7    |9.72    |25.11
 |YOLOv6s |640  |42.1   |58.6   |69.1     |52.5    |1.9    |17.22    |44.25
