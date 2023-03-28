@@ -33,9 +33,11 @@ Efficient Teacher算法的使用场景
 |Model |Dataset|size<br><sup>(pixels)|mAP<sup>val<br>0.5:0.95 |Speed<br><sup>V100<br>Pytorch<br>b32<br>FP32<br>(ms)|params<br><sup>(M) |FLOPs<br><sup>@640 (G)
 |---  |---    |---                  |---  |---    |---    |---   
 |[**YOLOv5s<br>Supervised**](https://github.com/AlibabaResearch/efficientteacher/releases/download/1.0/efficient-yolov5s.pt)|train2017|640 | 37.2  |1.6	| 7.2	| 16.5
-|[**YOLOv5s<br>Efficient Teacher**](https://github.com/AlibabaResearch/efficientteacher/releases/download/1.0/efficient-yolov5s-ssod.pt)   |train2017 + unlabeled2017|640 | **38.1**  |1.6    |7.2    |16.5
+|[**YOLOv5s<br>Efficient Teacher**](https://github.com/AlibabaResearch/efficientteacher/releases/download/1.0/efficient-yolov5s-ssod.pt)   |train2017 + unlabeled2017|640 | **38.1(+0.9)**  |1.6    |7.2    |16.5
+|[**YOLOv5m<br>Supervised**](https://github.com/AlibabaResearch/efficientteacher/releases/download/1.0/efficient-yolov5m.pt)|train2017|640|45.4|4.8|21.17|48.97
+|[**YOLOv5m<br>Efficient Teacher**](https://github.com/AlibabaResearch/efficientteacher/releases/download/1.0/efficient-yolov5m-ssod.pt)   |train2017 + unlabeled2017|640 | **46.4(+1.0)**  |4.8    |21.17   |48.97
 |[**YOLOv5l<br>Supervised**](https://github.com/AlibabaResearch/efficientteacher/releases/download/1.0/efficient-yolov5l.pt)|train2017|640 | 49.00  |6.2    |46.56    |109.59
-|[**YOLOv5l<br>Efficient Teacher**](https://github.com/AlibabaResearch/efficientteacher/releases/download/1.0/efficient-yolov5l-ssod.pt)   |train2017 + unlabeled2017|640 | **50.45**  |6.2    |46.56    |109.59
+|[**YOLOv5l<br>Efficient Teacher**](https://github.com/AlibabaResearch/efficientteacher/releases/download/1.0/efficient-yolov5l-ssod.pt)   |train2017 + unlabeled2017|640 | **50.45(+1.45)**  |6.2    |46.56    |109.59
 
 ### MS-COCO SSOD
 |Model |Dataset|size<br><sup>(pixels)|mAP<sup>val<br>0.5:0.95 |Speed<br><sup>V100<br>Pytorch<br>b32<br>FP32<br>(ms)|params<br><sup>(M) |FLOPs<br><sup>@640 (G)
