@@ -110,7 +110,7 @@ Efficient Teacher算法的使用场景
 
 感谢您选择这种稳健的方案来验证半监督训练的效果，这个方案步骤稍微多一些，但是每一步都是有基准线的，请按照以下步骤开始您的旅程：
 1. 模型转换
-- 首先请您查看一下```configs/custom/yolov5_custom.yaml```这份文件，如果您的模型是YOLOv5l, 那么你只需要修改yaml文件中Dataset里的nc参数，再修改一些类别名。如果您的模型结构是n/m/s/x，那么您还需要针对性地修改depth_multiple和width_multiple这两个参数
+- 首先请您查看一下```configs/sup/custom/yolov5_custom.yaml```这份文件，如果您的模型是YOLOv5l, 那么你只需要修改yaml文件中Dataset里的nc参数，再修改一些类别名。如果您的模型结构是n/m/s/x，那么您还需要针对性地修改depth_multiple和width_multiple这两个参数
 - 接着请您来到scripts文件夹下面修改```convert_pt_to_efficient.py```这份文件，填上您使用标准或魔改的YOLOv5代码训练出的模型pt, 再填上你修改后的yolov5_custom.yaml的绝对路径，还有你希望导出的模型放置位置
 - 如果上述操作没有报错的话，您现在已经获得了一份可以在efficientteacher库中运行的模型了，不用担心，我们的代码库也提供导回您自己算法库和导出为onnx的方案，确保您原来的开发工作流尽量不被干扰
 
